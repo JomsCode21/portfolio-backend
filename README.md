@@ -25,7 +25,7 @@ Create `.env` from `.env.example` and fill in your values:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb+srv://DATABASE_USER:DATABASE_PASSWORD@CLUSTER.mongodb.net/portfolio?retryWrites=true&w=majority
+MONGO_URI=yourdatabaseURL
 JWT_SECRET=use_a_long_random_secret
 JWT_EXPIRES_IN=7d
 CLIENT_URL=http://localhost:5173
