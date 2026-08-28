@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import * as controller from '../controllers/contactController.js';
+import { protect, authorize } from '../middleware/authMiddleware.js';
+const router = Router();
+router.post('/', controller.submit);
+router.use(protect, authorize('admin'));
+router.get('/', controller.list);
+router.get('/:id', controller.get);
+router.put('/:id/read', controller.markRead);
+router.delete('/:id', controller.remove);
+export default router;
