@@ -10,7 +10,7 @@ export async function submit(req, res, next) {
       });
     const contact = await Contact.create({ name, email, subject, message });
     await notifyNewContact(contact);
-    res.status(201).json({ success: true, message: 'Thanks—your message has been sent.' });
+    res.status(201).json({ success: true, message: 'Thanks! Your message has been sent.' });
   } catch (e) {
     next(e);
   }
