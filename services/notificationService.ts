@@ -129,7 +129,7 @@ const confirmationEmailTemplate = (contact) => `
                     <p style="margin:0 0 6px;color:#718096;font-family:Consolas,'Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">Your subject</p>
                     <p style="margin:0;color:#14213d;font-size:16px;font-weight:700;">${contact.subject}</p>
                   </div>
-                  <p style="margin:22px 0 0;">Best,<br>Jhumari Galos</p>
+                  <p style="margin:22px 0 0;">Best,<br>Jhumari Job Galos</p>
                 </td>
               </tr>
               <tr>
