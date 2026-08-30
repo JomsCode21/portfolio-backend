@@ -21,7 +21,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.3",
     "morgan": "^1.10.0",
-    "nodemailer": "^9.0.6",
+    "resend": "^6.25.0",
     "web-push": "^3.6.7"
   },
   "devDependencies": {
@@ -30,7 +30,6 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
     "@types/node": "^26.4.0",
-    "@types/nodemailer": "^8.0.1",
     "@types/web-push": "^3.6.4",
     "nodemon": "^3.1.4",
     "prettier": "^3.9.6",

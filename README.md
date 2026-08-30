@@ -42,18 +42,14 @@ Every new contact message can notify you by email and browser push notification.
 
 ```env
 NOTIFICATION_EMAIL=the_inbox_that_receives_contact_alerts
-SMTP_HOST=your_smtp_host
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your_smtp_username
-SMTP_PASS=your_smtp_password
-SMTP_FROM="Portfolio <you@example.com>"
+RESEND_API_KEY=re_your_resend_api_key
+RESEND_FROM="Portfolio <hello@your-verified-domain.com>"
 VAPID_SUBJECT=mailto:you@example.com
 VAPID_PUBLIC_KEY=your_generated_public_key
 VAPID_PRIVATE_KEY=your_generated_private_key
 ```
 
-Generate the VAPID key pair once with `npx web-push generate-vapid-keys --json`, then keep the private key secret. After deployment, sign in to the admin panel and select **Enable browser alerts** on the Settings page for each device that should receive pushes. Browser push requires HTTPS in production (localhost is allowed during development).
+Create a Resend API key and verify the domain used in `RESEND_FROM`. Generate the VAPID key pair once with `npx web-push generate-vapid-keys --json`, then keep the private key secret. After deployment, sign in to the admin panel and select **Enable browser alerts** on the Settings page for each device that should receive pushes. Browser push requires HTTPS in production (localhost is allowed during development).
 
 ## First administrator
 

@@ -1,22 +1,16 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import webpush from 'web-push';
 import PushSubscription from '../models/PushSubscription.js';
 
-const mailConfig = () => {
-  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SMTP_FROM, NOTIFICATION_EMAIL, ADMIN_EMAIL } =
-    process.env;
-  if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !(SMTP_FROM || SMTP_USER))
-    return null;
+const resendConfig = () => {
+  const { RESEND_API_KEY, RESEND_FROM, NOTIFICATION_EMAIL, ADMIN_EMAIL } = process.env;
+  const to = NOTIFICATION_EMAIL || ADMIN_EMAIL;
+  if (!RESEND_API_KEY || !RESEND_FROM || !to) return null;
 
   return {
-    transporter: nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: Number(SMTP_PORT),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-    }),
-    from: SMTP_FROM || SMTP_USER,
-    to: NOTIFICATION_EMAIL || ADMIN_EMAIL,
+    apiKey: RESEND_API_KEY,
+    from: RESEND_FROM,
+    to,
   };
 };
 
@@ -110,8 +104,8 @@ const contactEmailTemplate = (contact) => `
 `;
 
 async function sendEmail(contact) {
-  const config = mailConfig();
-  if (!config || !config.to) return;
+  const config = resendConfig();
+  if (!config) return;
 
   const safe = {
     name: escapeHtml(contact.name),
@@ -119,14 +113,16 @@ async function sendEmail(contact) {
     subject: escapeHtml(contact.subject),
     message: escapeHtml(contact.message),
   };
-  await config.transporter.sendMail({
+  const resend = new Resend(config.apiKey);
+  const { error } = await resend.emails.send({
     from: config.from,
-    to: config.to,
+    to: [config.to],
     replyTo: contact.email,
     subject: `New portfolio message: ${contact.subject}`,
     text: `New portfolio contact\n\nFrom: ${contact.name} <${contact.email}>\nSubject: ${contact.subject}\n\n${contact.message}`,
     html: contactEmailTemplate(safe),
   });
+  if (error) throw new Error(`Resend email delivery failed: ${error.message}`);
 }
 
 async function sendPush(contact) {
