@@ -10,7 +10,20 @@ const settingsSchema = new mongoose.Schema(
       default:
         'I build modern, responsive, and scalable full-stack web applications using MongoDB, Express.js, React.js, and Node.js.',
     },
+    aboutHeading: {
+      type: String,
+      trim: true,
+      maxlength: 180,
+      default: 'A practical, curious full-stack developer.',
+    },
     bio: { type: String, trim: true, maxlength: 4000, default: '' },
+    focus: { type: String, trim: true, maxlength: 120, default: 'Full-stack applications' },
+    approach: {
+      type: String,
+      trim: true,
+      maxlength: 160,
+      default: 'Thoughtful, iterative, user-centred',
+    },
     email: { type: String, trim: true, lowercase: true, default: 'iramuhjsolag@gmail.com' },
     phone: { type: String, trim: true, maxlength: 50, default: '' },
     location: { type: String, trim: true, maxlength: 100, default: '' },
