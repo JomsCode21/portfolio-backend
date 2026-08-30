@@ -36,6 +36,25 @@ NODE_ENV=development
 
 Never commit `.env`. Encode special characters in `DATABASE_PASSWORD` when they are used in `MONGO_URI`.
 
+## Contact notifications
+
+Every new contact message can notify you by email and browser push notification. Add these values to the API `.env` file:
+
+```env
+NOTIFICATION_EMAIL=the_inbox_that_receives_contact_alerts
+SMTP_HOST=your_smtp_host
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your_smtp_username
+SMTP_PASS=your_smtp_password
+SMTP_FROM="Portfolio <you@example.com>"
+VAPID_SUBJECT=mailto:you@example.com
+VAPID_PUBLIC_KEY=your_generated_public_key
+VAPID_PRIVATE_KEY=your_generated_private_key
+```
+
+Generate the VAPID key pair once with `npx web-push generate-vapid-keys --json`, then keep the private key secret. After deployment, sign in to the admin panel and select **Enable browser alerts** on the Settings page for each device that should receive pushes. Browser push requires HTTPS in production (localhost is allowed during development).
+
 ## First administrator
 
 After MongoDB is reachable, create the initial administrator account:

@@ -1,4 +1,5 @@
 import Contact from '../models/Contact.js';
+import { notifyNewContact } from '../services/notificationService.js';
 export async function submit(req, res, next) {
   try {
     const { name, email, subject, message } = req.body;
@@ -7,7 +8,8 @@ export async function submit(req, res, next) {
         success: false,
         message: 'Please complete every contact field.',
       });
-    await Contact.create({ name, email, subject, message });
+    const contact = await Contact.create({ name, email, subject, message });
+    await notifyNewContact(contact);
     res.status(201).json({ success: true, message: 'Thanks—your message has been sent.' });
   } catch (e) {
     next(e);
