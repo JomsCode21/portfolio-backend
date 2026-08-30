@@ -103,7 +103,49 @@ const contactEmailTemplate = (contact) => `
   </html>
 `;
 
-async function sendEmail(contact) {
+const confirmationEmailTemplate = (contact) => `
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body style="margin:0;padding:0;background:#f4f7fb;color:#14213d;font-family:Arial,Helvetica,sans-serif;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f4f7fb;padding:32px 16px;">
+        <tr>
+          <td align="center">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:600px;background:#ffffff;border:1px solid #dbe5f1;border-radius:14px;overflow:hidden;">
+              <tr>
+                <td style="padding:28px 32px;background:#0b1120;color:#ffffff;">
+                  <p style="margin:0 0 8px;color:#38bdf8;font-family:Consolas,'Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;">Portfolio contact form</p>
+                  <h1 style="margin:0;font-size:24px;line-height:1.25;font-weight:700;">Thanks for reaching out</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:30px 32px;color:#334155;font-size:15px;line-height:1.7;">
+                  <p style="margin:0 0 16px;">Hi ${contact.name},</p>
+                  <p style="margin:0 0 20px;">Your message has been received. I appreciate you taking the time to get in touch and will reply as soon as I can.</p>
+                  <div style="padding:18px 20px;background:#f7fafc;border:1px solid #e4edf6;border-radius:10px;">
+                    <p style="margin:0 0 6px;color:#718096;font-family:Consolas,'Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;">Your subject</p>
+                    <p style="margin:0;color:#14213d;font-size:16px;font-weight:700;">${contact.subject}</p>
+                  </div>
+                  <p style="margin:22px 0 0;">Best,<br>Jhumari Galos</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:18px 32px;border-top:1px solid #e4edf6;color:#718096;font-size:12px;line-height:1.5;">
+                  This is an automated confirmation for your message. You can reply to this email if you need to add anything.
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+`;
+
+async function sendOwnerEmail(contact) {
   const config = resendConfig();
   if (!config) return;
 
@@ -123,6 +165,26 @@ async function sendEmail(contact) {
     html: contactEmailTemplate(safe),
   });
   if (error) throw new Error(`Resend email delivery failed: ${error.message}`);
+}
+
+async function sendConfirmationEmail(contact) {
+  const config = resendConfig();
+  if (!config) return;
+
+  const safe = {
+    name: escapeHtml(contact.name),
+    subject: escapeHtml(contact.subject),
+  };
+  const resend = new Resend(config.apiKey);
+  const { error } = await resend.emails.send({
+    from: config.from,
+    to: [contact.email],
+    replyTo: config.to,
+    subject: `We received your message: ${contact.subject}`,
+    text: `Hi ${contact.name},\n\nYour message about “${contact.subject}” has been received. I will reply as soon as I can.\n\nBest,\nJhumari Job Galos`,
+    html: confirmationEmailTemplate(safe),
+  });
+  if (error) throw new Error(`Resend confirmation email failed: ${error.message}`);
 }
 
 async function sendPush(contact) {
@@ -154,7 +216,11 @@ async function sendPush(contact) {
 }
 
 export async function notifyNewContact(contact) {
-  const results = await Promise.allSettled([sendEmail(contact), sendPush(contact)]);
+  const results = await Promise.allSettled([
+    sendOwnerEmail(contact),
+    sendConfirmationEmail(contact),
+    sendPush(contact),
+  ]);
   results.forEach((result) => {
     if (result.status === 'rejected') console.error('Contact notification failed:', result.reason);
   });
