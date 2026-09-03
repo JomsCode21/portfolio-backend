@@ -13,6 +13,7 @@ import contactRoutes from './routes/contactRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import pushRoutes from './routes/pushRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 import { resourceRoutes } from './routes/resourceRoutes.js';
 import * as skillController from './controllers/resourceController.js';
 import Skill from './models/Skill.js';
@@ -21,6 +22,7 @@ import Education from './models/Education.js';
 import Certification from './models/Certification.js';
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 app.use(
   cors({
@@ -49,6 +51,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/push', pushRoutes);
+app.use('/api/uploads', uploadRoutes);
 app.use(notFound);
 app.use(errorHandler);
 await connectDB();
