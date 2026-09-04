@@ -17,6 +17,7 @@ const projectSchema = new mongoose.Schema(
     technologies: [{ type: String, trim: true, maxlength: 50 }],
     features: [{ type: String, trim: true, maxlength: 200 }],
     githubUrl: { type: String, trim: true, default: '' },
+    githubBackendUrl: { type: String, trim: true, default: '' },
     liveUrl: { type: String, trim: true, default: '' },
     featured: { type: Boolean, default: false },
     order: { type: Number, default: 0, min: 0 },
