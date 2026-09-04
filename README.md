@@ -51,9 +51,9 @@ VAPID_PRIVATE_KEY=your_generated_private_key
 
 Create a Resend API key and verify the domain used in `RESEND_FROM`. Generate the VAPID key pair once with `npx web-push generate-vapid-keys --json`, then keep the private key secret. After deployment, sign in to the admin panel and select **Enable browser alerts** on the Settings page for each device that should receive pushes. Browser push requires HTTPS in production (localhost is allowed during development).
 
-## Resume uploads
+## Resume and hero-image uploads
 
-The admin Settings page uploads PDF resumes to Cloudflare R2, using the same private-storage pattern as BPLO. Add the following values to the API `.env` file before uploading:
+The admin Settings page uploads PDF resumes and hero images to Cloudflare R2. Add the following values to the API `.env` file before uploading:
 
 ```env
 R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
@@ -62,7 +62,7 @@ R2_SECRET_ACCESS_KEY=your_r2_secret_access_key
 R2_BUCKET=your_r2_bucket_name
 ```
 
-The access key needs read, write, and delete access to that bucket. Uploaded resumes are limited to 10 MB and replacing one removes the old managed file.
+The access key needs read, write, and delete access to that bucket. Resumes are limited to 10 MB. Hero uploads accept JPEG, PNG, or WebP files up to 20 MB, then automatically correct their orientation, scale them down to 1600px on the longest side when needed, and store them as optimized WebP files. Replacing either removes the old managed file.
 
 ## First administrator
 

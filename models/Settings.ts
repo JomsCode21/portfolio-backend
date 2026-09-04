@@ -36,6 +36,8 @@ const settingsSchema = new mongoose.Schema(
     socialLinks: [{ label: { type: String, trim: true }, url: { type: String, trim: true } }],
     resumeUrl: { type: String, trim: true, default: '' },
     resumeFileKey: { type: String, trim: true, default: '' },
+    heroImageUrl: { type: String, trim: true, default: '' },
+    heroImageFileKey: { type: String, trim: true, default: '' },
     profileImage: { type: String, trim: true, default: '' },
     availableForWork: { type: Boolean, default: true },
     footerText: { type: String, trim: true, maxlength: 200, default: '' },
